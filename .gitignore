@@ -5,3 +5,4 @@ __pycache__/
 .databricks/
 .vscode/
 output/
+projects/project_01/generated_data/
