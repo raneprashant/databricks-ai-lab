@@ -1,4 +1,5 @@
 import csv
+import argparse
 from pathlib import Path
 
 
@@ -8,14 +9,9 @@ PROJECT_ROOT = (
     .parents[1]
 )
 
-DATA_ROOT = (
-    PROJECT_ROOT
-    / "generated_data"
-    / "smoke"
-)
-
 
 def load_rows(
+    data_root: Path,
     folder_name: str,
     pattern: str,
 ):
@@ -23,7 +19,7 @@ def load_rows(
     rows = []
 
     folder = (
-        DATA_ROOT
+        data_root
         / folder_name
     )
 
@@ -47,23 +43,46 @@ def load_rows(
 
 
 def main():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--scale",
+        choices=[
+            "smoke",
+            "medium",
+            "full",
+        ],
+        default="smoke",
+    )
+
+    args = parser.parse_args()
+
+    data_root = (
+        PROJECT_ROOT
+        / "generated_data"
+        / args.scale
+    )
 
     products = load_rows(
+        data_root,
         "product",
         "product_*.csv",
     )
 
     plans = load_rows(
+        data_root,
         "benefit_plan",
         "benefit_plan_*.csv",
     )
 
     groups = load_rows(
+        data_root,
         "group",
         "group_*.csv",
     )
 
     subgroups = load_rows(
+        data_root,
         "subgroup",
         "subgroup_*.csv",
     )

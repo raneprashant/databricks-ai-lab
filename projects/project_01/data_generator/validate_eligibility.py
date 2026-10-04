@@ -1,4 +1,5 @@
 import csv
+import argparse
 from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
@@ -15,18 +16,13 @@ PROJECT_ROOT = (
     .parents[1]
 )
 
-DATA_ROOT = (
-    PROJECT_ROOT
-    / "generated_data"
-    / "smoke"
-)
-
 
 # ---------------------------------------------------------
 # Generic helpers
 # ---------------------------------------------------------
 
 def load_rows(
+    data_root: Path,
     folder: str,
     pattern: str,
 ):
@@ -34,7 +30,7 @@ def load_rows(
     rows = []
 
     directory = (
-        DATA_ROOT
+        data_root
         / folder
     )
 
@@ -90,36 +86,62 @@ def add_years(
 
 def main():
 
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--scale",
+        choices=[
+            "smoke",
+            "medium",
+            "full",
+        ],
+        default="smoke",
+    )
+
+    args = parser.parse_args()
+
+    data_root = (
+        PROJECT_ROOT
+        / "generated_data"
+        / args.scale
+    )
+
     # -----------------------------------------------------
     # Load source datasets
     # -----------------------------------------------------
 
     members = load_rows(
+        data_root,
         "member",
         "member_*.csv",
     )
 
     products = load_rows(
+        data_root,
         "product",
         "product_*.csv",
     )
 
     plans = load_rows(
+        data_root,
         "benefit_plan",
         "benefit_plan_*.csv",
     )
 
     groups = load_rows(
+        data_root,
         "group",
         "group_*.csv",
     )
 
     subgroups = load_rows(
+        data_root,
         "subgroup",
         "subgroup_*.csv",
     )
 
     eligibility = load_rows(
+        data_root,
         "eligibility",
         "eligibility_*.csv",
     )

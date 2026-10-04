@@ -1,27 +1,20 @@
 import csv
+import argparse
 from collections import Counter, defaultdict
 from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
-DATA_ROOT = (
-    PROJECT_ROOT
-    / "generated_data"
-    / "smoke"
-)
-
 
 def load_rows(
+    data_root: Path,
     folder_name: str,
     file_pattern: str,
 ):
     rows = []
 
-    folder = (
-        DATA_ROOT
-        / folder_name
-    )
+    folder = (data_root / folder_name)
 
     for file_path in sorted(
         folder.glob(file_pattern)
@@ -41,32 +34,58 @@ def load_rows(
 
 def main():
 
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--scale",
+        choices=[
+            "smoke",
+            "medium",
+            "full",
+        ],
+        default="smoke",
+    )
+
+    args = parser.parse_args()
+
+    data_root = (
+        PROJECT_ROOT
+        / "generated_data"
+        / args.scale
+    )
+
     entity_addresses = load_rows(
+        data_root,
         "entity_address",
         "entity_address_*.csv",
     )
 
     members = load_rows(
+        data_root,
         "member",
         "member_*.csv",
     )
 
     practitioners = load_rows(
+        data_root,
         "practitioner",
         "practitioner_*.csv",
     )
 
     suppliers = load_rows(
+        data_root,
         "supplier",
         "supplier_*.csv",
     )
 
     supplier_locations = load_rows(
+        data_root,
         "supplier_location",
         "supplier_location_*.csv",
     )
 
     practitioner_roles = load_rows(
+        data_root,
         "practitioner_role",
         "practitioner_role_*.csv",
     )
