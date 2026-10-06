@@ -825,10 +825,18 @@ def generate_subgroups(
     rng: random.Random,
 ):
 
+    # ---------------------------------------------------------
+    # Product lookup
+    # ---------------------------------------------------------
+
     product_by_id = {
         row["product_id"]: row
         for row in products
     }
+
+    # ---------------------------------------------------------
+    # Organize Benefit Plans by Line of Business
+    # ---------------------------------------------------------
 
     plans_by_lob = {}
 
@@ -851,6 +859,10 @@ def generate_subgroups(
 
     subgroups = []
 
+    # ---------------------------------------------------------
+    # Generate Subgroups
+    # ---------------------------------------------------------
+
     for number in range(
         1,
         subgroup_count + 1,
@@ -861,33 +873,16 @@ def generate_subgroups(
             % len(groups)
         ]
 
-        matching_plans = (
-            plans_by_lob[
+        # -----------------------------------------------------
+        # Group effective period
+        # -----------------------------------------------------
+
+        group_start = (
+            date.fromisoformat(
                 group[
-                    "line_of_business"
+                    "effective_date"
                 ]
-            ]
-        )
-
-        benefit_plan = rng.choice(
-            matching_plans
-        )
-
-        group_start = date.fromisoformat(
-            group[
-                "effective_date"
-            ]
-        )
-
-        plan_start = date.fromisoformat(
-            benefit_plan[
-                "effective_date"
-            ]
-        )
-
-        effective_date = max(
-            group_start,
-            plan_start,
+            )
         )
 
         group_end = (
@@ -902,14 +897,147 @@ def generate_subgroups(
             else None
         )
 
-        if group_end:
+        # -----------------------------------------------------
+        # Candidate plans must first match the Group LOB.
+        # -----------------------------------------------------
+
+        candidate_plans = (
+            plans_by_lob[
+                group[
+                    "line_of_business"
+                ]
+            ]
+        )
+
+        # -----------------------------------------------------
+        # Then make sure the Benefit Plan and Group have
+        # overlapping effective periods.
+        # -----------------------------------------------------
+
+        matching_plans = []
+
+        for plan in candidate_plans:
+
+            plan_start = (
+                date.fromisoformat(
+                    plan[
+                        "effective_date"
+                    ]
+                )
+            )
+
+            plan_end = (
+                date.fromisoformat(
+                    plan[
+                        "termination_date"
+                    ]
+                )
+                if plan[
+                    "termination_date"
+                ]
+                else None
+            )
+
+            # Plan starts after the Group has already ended.
+            if (
+                group_end is not None
+                and plan_start > group_end
+            ):
+                continue
+
+            # Plan ended before the Group became effective.
+            if (
+                plan_end is not None
+                and plan_end < group_start
+            ):
+                continue
+
+            matching_plans.append(
+                plan
+            )
+
+        if not matching_plans:
+
+            raise RuntimeError(
+                "No temporally valid Benefit Plan "
+                f"found for Group "
+                f"{group['group_id']}."
+            )
+
+        # -----------------------------------------------------
+        # Pick one valid Benefit Plan.
+        # -----------------------------------------------------
+
+        benefit_plan = rng.choice(
+            matching_plans
+        )
+
+        plan_start = (
+            date.fromisoformat(
+                benefit_plan[
+                    "effective_date"
+                ]
+            )
+        )
+
+        plan_end = (
+            date.fromisoformat(
+                benefit_plan[
+                    "termination_date"
+                ]
+            )
+            if benefit_plan[
+                "termination_date"
+            ]
+            else None
+        )
+
+        # -----------------------------------------------------
+        # Subgroup cannot start before either:
+        #
+        # - Group
+        # - Benefit Plan
+        # -----------------------------------------------------
+
+        effective_date = max(
+            group_start,
+            plan_start,
+        )
+
+        # -----------------------------------------------------
+        # Subgroup cannot remain effective after either
+        # its Group or its Benefit Plan terminates.
+        # -----------------------------------------------------
+
+        possible_end_dates = [
+            value
+            for value in [
+                group_end,
+                plan_end,
+            ]
+            if value is not None
+        ]
+
+        termination_date = (
+            min(
+                possible_end_dates
+            )
+            if possible_end_dates
+            else None
+        )
+
+        # -----------------------------------------------------
+        # Determine Subgroup status.
+        # -----------------------------------------------------
+
+        if (
+            termination_date is not None
+            and termination_date
+            <= DATA_END_DATE
+        ):
 
             subgroup_status = (
                 "TERMINATED"
-            )
-
-            termination_date = (
-                group_end
             )
 
         elif (
@@ -921,15 +1049,15 @@ def generate_subgroups(
                 "FUTURE"
             )
 
-            termination_date = None
-
         else:
 
             subgroup_status = (
                 "ACTIVE"
             )
 
-            termination_date = None
+        # -----------------------------------------------------
+        # Employee class
+        # -----------------------------------------------------
 
         if (
             group[
@@ -972,6 +1100,36 @@ def generate_subgroups(
                 "INDIVIDUAL"
             )
 
+        # -----------------------------------------------------
+        # Safety check.
+        #
+        # We should NEVER generate:
+        #
+        # termination_date < effective_date
+        # -----------------------------------------------------
+
+        if (
+            termination_date is not None
+            and termination_date
+            < effective_date
+        ):
+
+            raise RuntimeError(
+                "Invalid Subgroup date range: "
+                f"group_id="
+                f"{group['group_id']}, "
+                f"benefit_plan_id="
+                f"{benefit_plan['benefit_plan_id']}, "
+                f"effective_date="
+                f"{effective_date}, "
+                f"termination_date="
+                f"{termination_date}"
+            )
+
+        # -----------------------------------------------------
+        # Technical timestamps
+        # -----------------------------------------------------
+
         create_date = min(
             effective_date,
             DATA_END_DATE,
@@ -982,53 +1140,72 @@ def generate_subgroups(
             DATA_END_DATE,
         )
 
+        # -----------------------------------------------------
+        # Create Subgroup row
+        # -----------------------------------------------------
+
         subgroups.append(
             {
                 "subgroup_id": (
                     f"SGRP{number:08d}"
                 ),
+
                 "group_id": (
                     group[
                         "group_id"
                     ]
                 ),
+
                 "subgroup_code": (
                     f"SG{number:08d}"
                 ),
+
                 "subgroup_name": (
                     f"{employee_class} "
                     f"{number:04d}"
                 ),
+
                 "employee_class": (
                     employee_class
                 ),
+
                 "benefit_plan_id": (
                     benefit_plan[
                         "benefit_plan_id"
                     ]
                 ),
+
                 "subgroup_status": (
                     subgroup_status
                 ),
+
                 "effective_date": (
                     effective_date.isoformat()
                 ),
+
                 "termination_date": (
                     termination_date.isoformat()
                     if termination_date
                     else ""
                 ),
+
                 "source_subgroup_key": (
                     f"SRCSGRP"
                     f"{number:08d}"
                 ),
-                "create_ts": build_timestamp(
-                    create_date,
-                    rng,
+
+                "create_ts": (
+                    build_timestamp(
+                        create_date,
+                        rng,
+                    )
                 ),
-                "update_ts": build_timestamp(
-                    update_date,
-                    rng,
+
+                "update_ts": (
+                    build_timestamp(
+                        update_date,
+                        rng,
+                    )
                 ),
             }
         )

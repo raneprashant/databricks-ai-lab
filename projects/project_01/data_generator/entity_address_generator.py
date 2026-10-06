@@ -150,7 +150,34 @@ def add_bridge_row(
     rng: random.Random,
 ):
 
+    # ---------------------------------------------------------
+    # A relationship cannot terminate before it becomes
+    # effective.
+    #
+    # If the source entity dates do not overlap, then this
+    # Entity Address relationship should not exist.
+    #
+    # Do NOT manufacture/fix the dates by forcing one date
+    # equal to another. Simply do not create an impossible
+    # bridge record.
+    # ---------------------------------------------------------
+
+    if (
+        termination_date is not None
+        and termination_date < effective_date
+    ):
+
+        return
+
+    # ---------------------------------------------------------
+    # Generate Entity Address ID only for a valid row.
+    # ---------------------------------------------------------
+
     row_number = len(rows) + 1
+
+    # ---------------------------------------------------------
+    # Determine active status.
+    # ---------------------------------------------------------
 
     if termination_date:
 
@@ -164,66 +191,101 @@ def add_bridge_row(
 
         active_flag = "Y"
 
+    # ---------------------------------------------------------
+    # Technical create timestamp.
+    #
+    # Future-effective relationships can still be generated,
+    # but their technical create timestamp should not be
+    # later than our dataset observation end date.
+    # ---------------------------------------------------------
+
     create_date = effective_date
 
     if create_date > DATA_END_DATE:
+
         create_date = DATA_END_DATE
+
+    # ---------------------------------------------------------
+    # Technical update timestamp.
+    # ---------------------------------------------------------
 
     update_date = (
         termination_date
-        if termination_date
-        and termination_date <= DATA_END_DATE
+        if (
+            termination_date
+            and termination_date
+            <= DATA_END_DATE
+        )
         else DATA_END_DATE
     )
 
     if update_date < create_date:
+
         update_date = create_date
+
+    # ---------------------------------------------------------
+    # Create Entity Address bridge record.
+    # ---------------------------------------------------------
 
     rows.append(
         {
             "entity_address_id": (
                 f"EADR{row_number:010d}"
             ),
+
             "entity_type": (
                 entity_type
             ),
+
             "entity_id": (
                 entity_id
             ),
+
             "address_id": (
                 address_id
             ),
+
             "address_type": (
                 address_type
             ),
+
             "primary_flag": (
                 primary_flag
             ),
+
             "effective_date": (
                 effective_date.isoformat()
             ),
+
             "termination_date": (
                 termination_date.isoformat()
                 if termination_date
                 else ""
             ),
+
             "active_flag": (
                 active_flag
             ),
+
             "source_entity_address_key": (
                 f"SRCEADR{row_number:010d}"
             ),
-            "create_ts": build_timestamp(
-                create_date,
-                rng,
+
+            "create_ts": (
+                build_timestamp(
+                    create_date,
+                    rng,
+                )
             ),
-            "update_ts": build_timestamp(
-                update_date,
-                rng,
+
+            "update_ts": (
+                build_timestamp(
+                    update_date,
+                    rng,
+                )
             ),
         }
     )
-
 
 def build_member_addresses(
     rows: list,

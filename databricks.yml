@@ -1,19 +1,72 @@
 # This is a Declarative Automation Bundle definition for databricks-ai-lab.
-# The Databricks extension requires databricks.yml configuration file.
-# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+# Databricks resources such as pipelines and jobs are defined
+# under the resources folder and included here.
 
 bundle:
   name: databricks-ai-lab
 
+
+# ---------------------------------------------------------
+# Resource definitions
+# ---------------------------------------------------------
+
+include:
+  - resources/*.yml
+
+
+# ---------------------------------------------------------
+# Environment variables
+#
+# These allow the same code to be deployed later to
+# DEV / TEST / PROD without hardcoding environment names
+# inside Python source files.
+# ---------------------------------------------------------
+
+variables:
+
+  catalog:
+    description: Unity Catalog catalog for Project 01
+    default: payer_01_dev
+
+  bronze_schema:
+    description: Bronze schema for Project 01
+    default: bronze
+
+  silver_schema:
+    description: Silver schema for Project 01
+    default: silver
+
+  landing_root:
+    description: Landing volume path for inbound payer files
+    default: /Volumes/payer_01_dev/bronze/landing
+
+
+# ---------------------------------------------------------
+# Deployment targets
+# ---------------------------------------------------------
+
 targets:
+
   dev:
     mode: development
     default: true
+
     workspace:
       host: https://dbc-536d8077-bb93.cloud.databricks.com
 
-  ## Optionally, there could be 'staging' or 'prod' targets here.
+
+  # We will add these later.
+  #
+  # test:
+  #   mode: development
+  #   variables:
+  #     catalog: payer_01_test
+  #     bronze_schema: bronze
+  #     landing_root: /Volumes/payer_01_test/bronze/landing
   #
   # prod:
-  #   workspace:
-  #     host: https://dbc-536d8077-bb93.cloud.databricks.com
+  #   mode: production
+  #   variables:
+  #     catalog: payer_01_prod
+  #     bronze_schema: bronze
+  #     landing_root: /Volumes/payer_01_prod/bronze/landing

@@ -1,0 +1,28 @@
+resources:
+
+  pipelines:
+
+    payer_01_silver_provider:
+
+      name: payer_01_silver_provider
+
+      catalog: ${var.catalog}
+      schema: ${var.silver_schema}
+
+      serverless: true
+
+      root_path: ../projects/project_01/src/silver/provider
+
+      libraries:
+
+        - glob:
+            include: ../projects/project_01/src/silver/provider/**
+
+      configuration:
+
+        payer.catalog: ${var.catalog}
+        payer.bronze_schema: ${var.bronze_schema}
+
+      development: true
+
+      channel: CURRENT

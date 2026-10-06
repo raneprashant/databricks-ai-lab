@@ -95,7 +95,7 @@ def main() -> None:
             "eligibility",
             "claims",
         ],
-        default="plan",
+        default="summary",
         help="Generator domain to execute.",
     )
 

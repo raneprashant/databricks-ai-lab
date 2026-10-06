@@ -1,0 +1,49 @@
+resources:
+
+  pipelines:
+
+    payer_01_silver_member_reference:
+
+      name: payer_01_silver_member_reference
+
+      # -----------------------------------------------
+      # Silver publication location
+      # -----------------------------------------------
+
+      catalog: ${var.catalog}
+      schema: ${var.silver_schema}
+
+      # -----------------------------------------------
+      # Serverless Lakeflow pipeline
+      # -----------------------------------------------
+
+      serverless: true
+
+      # -----------------------------------------------
+      # Silver Member/Reference source-code folder
+      # -----------------------------------------------
+
+      root_path: ../projects/project_01/src/silver/member_reference
+
+      libraries:
+
+        - glob:
+            include: ../projects/project_01/src/silver/member_reference/**
+
+      # -----------------------------------------------
+      # Values exposed to Python through spark.conf
+      #
+      # member_scd2.py uses:
+      #
+      # spark.conf.get("payer.catalog")
+      # spark.conf.get("payer.bronze_schema")
+      # -----------------------------------------------
+
+      configuration:
+
+        payer.catalog: ${var.catalog}
+        payer.bronze_schema: ${var.bronze_schema}
+
+      development: true
+
+      channel: CURRENT

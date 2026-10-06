@@ -1,0 +1,55 @@
+resources:
+
+  pipelines:
+
+    payer_01_bronze_ingestion:
+
+      name: payer_01_bronze_ingestion
+
+      # -----------------------------------------------
+      # Unity Catalog publication location
+      # -----------------------------------------------
+
+      catalog: ${var.catalog}
+      schema: ${var.bronze_schema}
+
+      # -----------------------------------------------
+      # Use serverless Lakeflow pipeline compute
+      # -----------------------------------------------
+
+      serverless: true
+
+      # -----------------------------------------------
+      # Pipeline source root
+      # -----------------------------------------------
+
+      root_path: ../projects/project_01/src/bronze
+
+      # -----------------------------------------------
+      # Python pipeline source files
+      # -----------------------------------------------
+
+      libraries:
+
+        - glob:
+            include: ../projects/project_01/src/bronze/**
+
+      # -----------------------------------------------
+      # Values exposed through spark.conf
+      #
+      # bronze_ingestion.py reads:
+      #
+      # spark.conf.get("payer.landing_root")
+      # -----------------------------------------------
+
+      configuration:
+
+        payer.landing_root: ${var.landing_root}
+
+      # -----------------------------------------------
+      # Development configuration
+      # -----------------------------------------------
+
+      development: true
+
+      channel: CURRENT

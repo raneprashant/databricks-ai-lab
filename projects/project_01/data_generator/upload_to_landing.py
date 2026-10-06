@@ -1,7 +1,6 @@
 import argparse
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 
@@ -14,17 +13,17 @@ PROJECT_ROOT = (
 
 LANDING_DOMAINS = [
     "member",
-    "supplier",
-    "supplier_location",
-    "practitioner",
-    "practitioner_role",
-    "address",
-    "entity_address",
     "product",
     "benefit_plan",
     "group",
     "subgroup",
     "eligibility",
+    "practitioner",
+    "supplier",
+    "supplier_location",
+    "practitioner_role",
+    "address",
+    "entity_address",
     "claim_header",
     "claim_line",
 ]
@@ -56,8 +55,8 @@ def main():
 
     parser = argparse.ArgumentParser(
         description=(
-            "Upload generated payer source CSV "
-            "files into a Databricks landing volume."
+            "Upload base or incremental payer CSV files "
+            "to Databricks landing volume."
         )
     )
 
@@ -69,6 +68,16 @@ def main():
             "full",
         ],
         required=True,
+    )
+
+    parser.add_argument(
+        "--batch-id",
+        required=False,
+        help=(
+            "Incremental batch folder, for example "
+            "20261005_153749. "
+            "If omitted, base files are uploaded."
+        ),
     )
 
     parser.add_argument(
@@ -94,7 +103,7 @@ def main():
     args = parser.parse_args()
 
     # -----------------------------------------------------
-    # Verify Databricks CLI exists
+    # Verify Databricks CLI
     # -----------------------------------------------------
 
     databricks_cli = shutil.which(
@@ -109,24 +118,50 @@ def main():
         )
 
     # -----------------------------------------------------
-    # Local source root
+    # Determine local source
+    #
+    # No batch-id:
+    #   generated_data/medium/member/*.csv
+    #
+    # With batch-id:
+    #   generated_data/medium/incremental/
+    #       20261005_153749/member/*.csv
     # -----------------------------------------------------
 
-    local_root = (
+    scale_root = (
         PROJECT_ROOT
         / "generated_data"
         / args.scale
     )
 
+    if args.batch_id:
+
+        local_root = (
+            scale_root
+            / "incremental"
+            / args.batch_id
+        )
+
+        load_type = "INCREMENTAL"
+
+    else:
+
+        local_root = (
+            scale_root
+        )
+
+        load_type = "BASE"
+
     if not local_root.exists():
 
         raise FileNotFoundError(
-            f"Local generated-data folder "
-            f"does not exist: {local_root}"
+            f"Local source folder "
+            f"does not exist: "
+            f"{local_root}"
         )
 
     # -----------------------------------------------------
-    # Databricks landing volume
+    # Databricks landing root
     # -----------------------------------------------------
 
     remote_root = (
@@ -144,19 +179,33 @@ def main():
     print("=" * 80)
 
     print(
+        f"Load type    : {load_type}"
+    )
+
+    print(
         f"Scale        : {args.scale}"
     )
 
+    if args.batch_id:
+
+        print(
+            f"Batch ID     : "
+            f"{args.batch_id}"
+        )
+
     print(
-        f"Local source : {local_root}"
+        f"Local source : "
+        f"{local_root}"
     )
 
     print(
-        f"Remote target: {remote_root}"
+        f"Remote target: "
+        f"{remote_root}"
     )
 
     print(
-        f"Profile      : {args.profile}"
+        f"Profile      : "
+        f"{args.profile}"
     )
 
     print("=" * 80)
@@ -164,7 +213,7 @@ def main():
     total_files = 0
 
     # -----------------------------------------------------
-    # Process each source domain
+    # Process all 14 domains
     # -----------------------------------------------------
 
     for domain in LANDING_DOMAINS:
@@ -177,8 +226,8 @@ def main():
         if not local_domain.exists():
 
             raise FileNotFoundError(
-                f"Missing local domain "
-                f"folder: {local_domain}"
+                f"Missing domain folder: "
+                f"{local_domain}"
             )
 
         csv_files = sorted(
@@ -201,21 +250,19 @@ def main():
 
         print()
         print("-" * 80)
+
         print(
             f"DOMAIN: {domain}"
         )
+
         print(
-            f"Files : {len(csv_files)}"
+            f"Files : "
+            f"{len(csv_files)}"
         )
+
         print("-" * 80)
 
-        # -------------------------------------------------
-        # Create destination directory
-        #
-        # Databricks fs mkdir is safe if the directory
-        # already exists.
-        # -------------------------------------------------
-
+        # Ensure remote domain directory exists.
         run_command(
             [
                 databricks_cli,
@@ -227,14 +274,7 @@ def main():
             ]
         )
 
-        # -------------------------------------------------
-        # Upload each CSV explicitly.
-        #
-        # Doing files individually avoids ambiguity about
-        # whether a recursive directory copy adds another
-        # nested directory level.
-        # -------------------------------------------------
-
+        # Upload every CSV in this domain.
         for local_file in csv_files:
 
             remote_file = (
@@ -265,8 +305,21 @@ def main():
     print("=" * 80)
 
     print(
-        f"Scale         : {args.scale}"
+        f"Load type     : "
+        f"{load_type}"
     )
+
+    print(
+        f"Scale         : "
+        f"{args.scale}"
+    )
+
+    if args.batch_id:
+
+        print(
+            f"Batch ID      : "
+            f"{args.batch_id}"
+        )
 
     print(
         f"Domains       : "

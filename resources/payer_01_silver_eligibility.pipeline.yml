@@ -1,0 +1,28 @@
+resources:
+
+  pipelines:
+
+    payer_01_silver_eligibility:
+
+      name: payer_01_silver_eligibility
+
+      catalog: ${var.catalog}
+      schema: ${var.silver_schema}
+
+      serverless: true
+
+      root_path: ../projects/project_01/src/silver/eligibility
+
+      libraries:
+
+        - glob:
+            include: ../projects/project_01/src/silver/eligibility/**
+
+      configuration:
+
+        payer.catalog: ${var.catalog}
+        payer.bronze_schema: ${var.bronze_schema}
+
+      development: true
+
+      channel: CURRENT
