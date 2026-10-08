@@ -36,6 +36,10 @@ variables:
     description: Silver schema for Project 01
     default: silver
 
+  gold_schema:
+    description: Gold schema for Project 01
+    default: gold
+
   landing_root:
     description: Landing volume path for inbound payer files
     default: /Volumes/payer_01_dev/bronze/landing

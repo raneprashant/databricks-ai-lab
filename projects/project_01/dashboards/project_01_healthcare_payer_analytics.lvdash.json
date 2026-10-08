@@ -1,0 +1,3194 @@
+{
+  "datasets": [
+    {
+      "displayName": "membership",
+      "name": "88240498",
+      "queryLines": [
+        "-- ============================================================\r\n",
+        "-- Project 01 - Healthcare Payer\r\n",
+        "-- Dashboard Dataset\r\n",
+        "-- File: 01_membership_dataset.sql\r\n",
+        "--\r\n",
+        "-- Source:\r\n",
+        "--   Gold membership_summary\r\n",
+        "--\r\n",
+        "-- Usage:\r\n",
+        "--   Executive Overview\r\n",
+        "--   Membership Dashboard\r\n",
+        "-- ============================================================\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "\r\n",
+        "    as_of_date,\r\n",
+        "\r\n",
+        "    line_of_business,\r\n",
+        "\r\n",
+        "    product_id,\r\n",
+        "    product_code,\r\n",
+        "    product_name,\r\n",
+        "    product_type,\r\n",
+        "\r\n",
+        "    benefit_plan_id,\r\n",
+        "    plan_code,\r\n",
+        "    plan_name,\r\n",
+        "\r\n",
+        "    group_id,\r\n",
+        "    group_number,\r\n",
+        "    group_name,\r\n",
+        "\r\n",
+        "    member_count,\r\n",
+        "\r\n",
+        "    subscriber_count,\r\n",
+        "\r\n",
+        "    dependent_count,\r\n",
+        "\r\n",
+        "    family_count,\r\n",
+        "\r\n",
+        "    unique_subscriber_count,\r\n",
+        "\r\n",
+        "    medical_covered_member_count,\r\n",
+        "\r\n",
+        "    pharmacy_covered_member_count,\r\n",
+        "\r\n",
+        "    dental_covered_member_count,\r\n",
+        "\r\n",
+        "    vision_covered_member_count\r\n",
+        "\r\n",
+        "FROM\r\n",
+        "\r\n",
+        "    payer_01_dev.gold.membership_summary\r\n",
+        ";"
+      ]
+    },
+    {
+      "displayName": "claim_spend",
+      "name": "e371e46f",
+      "queryLines": [
+        "-- ============================================================\r\n",
+        "-- Project 01 - Healthcare Payer\r\n",
+        "-- Dashboard Dataset\r\n",
+        "-- File: 02_claim_spend_dataset.sql\r\n",
+        "--\r\n",
+        "-- Source:\r\n",
+        "--   Gold claim_spend_summary\r\n",
+        "--\r\n",
+        "-- Usage:\r\n",
+        "--   Executive Overview\r\n",
+        "--   Claims Dashboard\r\n",
+        "-- ============================================================\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "\r\n",
+        "    service_month,\r\n",
+        "\r\n",
+        "    line_of_business,\r\n",
+        "\r\n",
+        "    product_id,\r\n",
+        "    product_code,\r\n",
+        "    product_name,\r\n",
+        "    product_type,\r\n",
+        "\r\n",
+        "    benefit_plan_id,\r\n",
+        "    plan_code,\r\n",
+        "    plan_name,\r\n",
+        "\r\n",
+        "    claim_status,\r\n",
+        "\r\n",
+        "    network_status,\r\n",
+        "\r\n",
+        "    claim_count,\r\n",
+        "\r\n",
+        "    unique_member_count,\r\n",
+        "\r\n",
+        "    unique_supplier_count,\r\n",
+        "\r\n",
+        "    total_billed_amount,\r\n",
+        "\r\n",
+        "    total_allowed_amount,\r\n",
+        "\r\n",
+        "    total_paid_amount,\r\n",
+        "\r\n",
+        "    member_responsibility_amount,\r\n",
+        "\r\n",
+        "    average_billed_per_claim,\r\n",
+        "\r\n",
+        "    average_allowed_per_claim,\r\n",
+        "\r\n",
+        "    average_paid_per_claim,\r\n",
+        "\r\n",
+        "    allowed_to_billed_pct,\r\n",
+        "\r\n",
+        "    paid_to_allowed_pct,\r\n",
+        "\r\n",
+        "    member_responsibility_pct\r\n",
+        "\r\n",
+        "FROM\r\n",
+        "\r\n",
+        "    payer_01_dev.gold.claim_spend_summary\r\n",
+        ";"
+      ]
+    },
+    {
+      "displayName": "claim_mix",
+      "name": "c7a415a2",
+      "queryLines": [
+        "-- ============================================================\r\n",
+        "-- Project 01 - Healthcare Payer\r\n",
+        "-- Dashboard Dataset\r\n",
+        "-- File: 03_claim_mix_dataset.sql\r\n",
+        "--\r\n",
+        "-- Source:\r\n",
+        "--   Gold claims_enriched\r\n",
+        "--\r\n",
+        "-- Purpose:\r\n",
+        "--   Claim-type, diagnosis, place-of-service and network analysis.\r\n",
+        "-- ============================================================\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "\r\n",
+        "    service_month,\r\n",
+        "\r\n",
+        "    line_of_business,\r\n",
+        "\r\n",
+        "    product_id,\r\n",
+        "    product_name,\r\n",
+        "\r\n",
+        "    benefit_plan_id,\r\n",
+        "    plan_name,\r\n",
+        "\r\n",
+        "    claim_type,\r\n",
+        "\r\n",
+        "    claim_status,\r\n",
+        "\r\n",
+        "    network_status,\r\n",
+        "\r\n",
+        "    network_tier,\r\n",
+        "\r\n",
+        "    place_of_service_code,\r\n",
+        "\r\n",
+        "    primary_diagnosis_category,\r\n",
+        "\r\n",
+        "    COUNT(*) AS claim_count,\r\n",
+        "\r\n",
+        "    COUNT(\r\n",
+        "        DISTINCT member_id\r\n",
+        "    ) AS unique_member_count,\r\n",
+        "\r\n",
+        "    COUNT(\r\n",
+        "        DISTINCT practitioner_id\r\n",
+        "    ) AS unique_practitioner_count,\r\n",
+        "\r\n",
+        "    COUNT(\r\n",
+        "        DISTINCT supplier_id\r\n",
+        "    ) AS unique_supplier_count,\r\n",
+        "\r\n",
+        "    SUM(total_billed_amount)\r\n",
+        "        AS total_billed_amount,\r\n",
+        "\r\n",
+        "    SUM(total_allowed_amount)\r\n",
+        "        AS total_allowed_amount,\r\n",
+        "\r\n",
+        "    SUM(total_paid_amount)\r\n",
+        "        AS total_paid_amount,\r\n",
+        "\r\n",
+        "    SUM(member_responsibility_amount)\r\n",
+        "        AS member_responsibility_amount\r\n",
+        "\r\n",
+        "FROM\r\n",
+        "\r\n",
+        "    payer_01_dev.gold.claims_enriched\r\n",
+        "\r\n",
+        "GROUP BY\r\n",
+        "\r\n",
+        "    service_month,\r\n",
+        "\r\n",
+        "    line_of_business,\r\n",
+        "\r\n",
+        "    product_id,\r\n",
+        "    product_name,\r\n",
+        "\r\n",
+        "    benefit_plan_id,\r\n",
+        "    plan_name,\r\n",
+        "\r\n",
+        "    claim_type,\r\n",
+        "\r\n",
+        "    claim_status,\r\n",
+        "\r\n",
+        "    network_status,\r\n",
+        "\r\n",
+        "    network_tier,\r\n",
+        "\r\n",
+        "    place_of_service_code,\r\n",
+        "\r\n",
+        "    primary_diagnosis_category\r\n",
+        ";"
+      ]
+    },
+    {
+      "displayName": "provider_utilization",
+      "name": "318685bd",
+      "queryLines": [
+        "-- ============================================================\r\n",
+        "-- Project 01 - Healthcare Payer\r\n",
+        "-- Dashboard Dataset\r\n",
+        "-- File: 04_provider_utilization_dataset.sql\r\n",
+        "--\r\n",
+        "-- Source:\r\n",
+        "--   Gold provider_utilization_summary\r\n",
+        "--\r\n",
+        "-- Purpose:\r\n",
+        "--   Provider Utilization dashboard dataset.\r\n",
+        "--\r\n",
+        "--   Gold already performs the aggregation and business logic.\r\n",
+        "--   Dashboard SQL remains intentionally thin.\r\n",
+        "-- ============================================================\r\n",
+        "\r\n",
+        "\r\n",
+        "SELECT\r\n",
+        "\r\n",
+        "    -- Reporting period\r\n",
+        "    service_month,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Coverage hierarchy\r\n",
+        "    line_of_business,\r\n",
+        "\r\n",
+        "    product_id,\r\n",
+        "    product_code,\r\n",
+        "    product_name,\r\n",
+        "\r\n",
+        "    benefit_plan_id,\r\n",
+        "    plan_code,\r\n",
+        "    plan_name,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Practitioner\r\n",
+        "    practitioner_id,\r\n",
+        "    individual_npi,\r\n",
+        "\r\n",
+        "    practitioner_first_name,\r\n",
+        "    practitioner_last_name,\r\n",
+        "\r\n",
+        "    practitioner_primary_specialty,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Practitioner role\r\n",
+        "    practitioner_role_id,\r\n",
+        "\r\n",
+        "    role_type,\r\n",
+        "    role_specialty,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Supplier\r\n",
+        "    supplier_id,\r\n",
+        "    supplier_name,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Supplier location\r\n",
+        "    supplier_location_id,\r\n",
+        "    supplier_location_name,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Service\r\n",
+        "    service_category,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Utilization\r\n",
+        "    claim_line_count,\r\n",
+        "    claim_count,\r\n",
+        "    unique_member_count,\r\n",
+        "    total_units,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Financials\r\n",
+        "    total_billed_amount,\r\n",
+        "    total_allowed_amount,\r\n",
+        "    total_paid_amount,\r\n",
+        "    member_responsibility_amount,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Average financials\r\n",
+        "    average_billed_per_line,\r\n",
+        "    average_allowed_per_line,\r\n",
+        "    average_paid_per_line,\r\n",
+        "\r\n",
+        "\r\n",
+        "    -- Ratios\r\n",
+        "    allowed_to_billed_pct,\r\n",
+        "    paid_to_allowed_pct\r\n",
+        "\r\n",
+        "\r\n",
+        "FROM\r\n",
+        "\r\n",
+        "    payer_01_dev.gold.provider_utilization_summary\r\n",
+        ";"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "displayName": "Executive Overview",
+      "layout": [
+        {
+          "position": {
+            "height": 2,
+            "width": 12,
+            "x": 0,
+            "y": 0
+          },
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Project 01 - Healthcare Payer Analytics&#32;*</span>\n",
+                "\n",
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Executive Overview*</span>"
+              ]
+            },
+            "name": "61416bfb",
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#FFFFFF"
+              },
+              "widgetBorderColor": {
+                "dark": "#1C1113"
+              }
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 0,
+            "y": 2
+          },
+          "widget": {
+            "name": "covered-members",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`member_count`)",
+                      "name": "sum(member_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(member_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Covered Members"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 2,
+            "y": 2
+          },
+          "widget": {
+            "name": "ca7d8343",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(claim_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Claims"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 4,
+            "y": 2
+          },
+          "widget": {
+            "name": "479946d4",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_billed_amount`)",
+                      "name": "sum(total_billed_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_billed_amount)",
+                  "format": {
+                    "abbreviation": "none",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Billed"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 6,
+            "y": 2
+          },
+          "widget": {
+            "name": "c23d0800",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_allowed_amount`)",
+                      "name": "sum(total_allowed_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_allowed_amount)",
+                  "format": {
+                    "abbreviation": "none",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Allowed"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 8,
+            "y": 2
+          },
+          "widget": {
+            "name": "312e2853",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_paid_amount)",
+                  "format": {
+                    "abbreviation": "none",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Paid"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 10,
+            "y": 2
+          },
+          "widget": {
+            "name": "05643e6c",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`member_responsibility_amount`)",
+                      "name": "sum(member_responsibility_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(member_responsibility_amount)",
+                  "format": {
+                    "abbreviation": "none",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Member Responsibility"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 4
+          },
+          "widget": {
+            "name": "monthly-paid-amount-trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "DATE_TRUNC(\"MONTH\", `service_month`)",
+                      "name": "monthly(service_month)"
+                    },
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": false
+                },
+                "x": {
+                  "fieldName": "monthly(service_month)",
+                  "format": {
+                    "date": "locale-short-month",
+                    "leadingZeros": false,
+                    "type": "date"
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "axis": {
+                    "labelAngle": 45
+                  },
+                  "fieldName": "sum(total_paid_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Monthly Paid Amount Trend"
+                }
+              },
+              "version": 3,
+              "widgetType": "line"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 6,
+            "y": 4
+          },
+          "widget": {
+            "name": "claims-by-line-of-business",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "line_of_business",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Claims by Line of Business"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 10
+          },
+          "widget": {
+            "name": "paid-amount-by-claim-status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`claim_status`",
+                      "name": "claim_status"
+                    },
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "claim_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_paid_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Paid Amount by Claim Status"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        }
+      ],
+      "layoutVersion": "GRID_V1",
+      "name": "9189ed68",
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "position": {
+            "height": 2,
+            "width": 1,
+            "x": 0,
+            "y": 0
+          },
+          "widget": {
+            "name": "line-of-business",
+            "queries": [
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276d2d814908912da553ef98fb0_line_of_business",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "line_of_business_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276e14f181f9e2576c432a3b8c6_line_of_business",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "line_of_business_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f5931abab6a5a35820e6a3ad_line_of_business",
+                "query": {
+                  "datasetName": "c7a415a2",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "line_of_business_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f7d81d578f87daa2c587ed70_line_of_business",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "line_of_business_associativity"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "line_of_business",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276d2d814908912da553ef98fb0_line_of_business"
+                  },
+                  {
+                    "fieldName": "line_of_business",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276e14f181f9e2576c432a3b8c6_line_of_business"
+                  },
+                  {
+                    "fieldName": "line_of_business",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f5931abab6a5a35820e6a3ad_line_of_business"
+                  },
+                  {
+                    "fieldName": "line_of_business",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f7d81d578f87daa2c587ed70_line_of_business"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Line of Business"
+                }
+              },
+              "version": 2,
+              "widgetType": "filter-multi-select"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 1,
+            "x": 0,
+            "y": 2
+          },
+          "widget": {
+            "name": "product",
+            "queries": [
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276d2d814908912da553ef98fb0_product_name",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`product_name`",
+                      "name": "product_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "product_name_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276e14f181f9e2576c432a3b8c6_product_name",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`product_name`",
+                      "name": "product_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "product_name_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f5931abab6a5a35820e6a3ad_product_name",
+                "query": {
+                  "datasetName": "c7a415a2",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`product_name`",
+                      "name": "product_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "product_name_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f7d81d578f87daa2c587ed70_product_name",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`product_name`",
+                      "name": "product_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "product_name_associativity"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "product_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276d2d814908912da553ef98fb0_product_name"
+                  },
+                  {
+                    "fieldName": "product_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276e14f181f9e2576c432a3b8c6_product_name"
+                  },
+                  {
+                    "fieldName": "product_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f5931abab6a5a35820e6a3ad_product_name"
+                  },
+                  {
+                    "fieldName": "product_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f7d81d578f87daa2c587ed70_product_name"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Product"
+                }
+              },
+              "version": 2,
+              "widgetType": "filter-single-select"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 1,
+            "x": 0,
+            "y": 4
+          },
+          "widget": {
+            "name": "benefit-plan",
+            "queries": [
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276d2d814908912da553ef98fb0_plan_name",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`plan_name`",
+                      "name": "plan_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "plan_name_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276e14f181f9e2576c432a3b8c6_plan_name",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`plan_name`",
+                      "name": "plan_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "plan_name_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f5931abab6a5a35820e6a3ad_plan_name",
+                "query": {
+                  "datasetName": "c7a415a2",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`plan_name`",
+                      "name": "plan_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "plan_name_associativity"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f7d81d578f87daa2c587ed70_plan_name",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`plan_name`",
+                      "name": "plan_name"
+                    },
+                    {
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)",
+                      "name": "plan_name_associativity"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "plan_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276d2d814908912da553ef98fb0_plan_name"
+                  },
+                  {
+                    "fieldName": "plan_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276e14f181f9e2576c432a3b8c6_plan_name"
+                  },
+                  {
+                    "fieldName": "plan_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f5931abab6a5a35820e6a3ad_plan_name"
+                  },
+                  {
+                    "fieldName": "plan_name",
+                    "queryName": "dashboards/01f1c27698e9117990ba705754e513c7/datasets/01f1c276f7d81d578f87daa2c587ed70_plan_name"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Benefit Plan"
+                }
+              },
+              "version": 2,
+              "widgetType": "filter-single-select"
+            }
+          }
+        }
+      ],
+      "layoutVersion": "GRID_V1",
+      "name": "e7cd5bc0",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
+    },
+    {
+      "displayName": "Membership",
+      "layout": [
+        {
+          "position": {
+            "height": 2,
+            "width": 12,
+            "x": 0,
+            "y": 0
+          },
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Membership Analytics*</span>\n",
+                "\n",
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Current covered membership as of September 30, 2026*</span>"
+              ]
+            },
+            "name": "6fdc1c74"
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 0,
+            "y": 2
+          },
+          "widget": {
+            "name": "covered-members",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`member_count`)",
+                      "name": "sum(member_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(member_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Covered Members"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 2,
+            "y": 2
+          },
+          "widget": {
+            "name": "6d0be264",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`subscriber_count`)",
+                      "name": "sum(subscriber_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(subscriber_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Subscribers"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 4,
+            "y": 2
+          },
+          "widget": {
+            "name": "6dba7bdd",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`dependent_count`)",
+                      "name": "sum(dependent_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(dependent_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Dependents"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 6,
+            "y": 2
+          },
+          "widget": {
+            "name": "f22d4803",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`medical_covered_member_count`)",
+                      "name": "sum(medical_covered_member_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(medical_covered_member_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Medical Coverage"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 4
+          },
+          "widget": {
+            "name": "members-by-line-of-business",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "SUM(`member_count`)",
+                      "name": "sum(member_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "line_of_business",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(member_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Members by Line of Business"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 6,
+            "y": 4
+          },
+          "widget": {
+            "name": "members-by-product",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`product_name`",
+                      "name": "product_name"
+                    },
+                    {
+                      "expression": "SUM(`member_count`)",
+                      "name": "sum(member_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "product_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(member_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nMembers by Product\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 10
+          },
+          "widget": {
+            "name": "subscribers-dependents-line-of-business",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "SUM(`subscriber_count`)",
+                      "name": "sum(subscriber_count)"
+                    },
+                    {
+                      "expression": "SUM(`dependent_count`)",
+                      "name": "sum(dependent_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "line_of_business",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "sum(subscriber_count)"
+                    },
+                    {
+                      "fieldName": "sum(dependent_count)"
+                    }
+                  ],
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Subscribers vs Dependents by Line of Business"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 12,
+            "x": 0,
+            "y": 16
+          },
+          "widget": {
+            "name": "membership-detail",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "88240498",
+                  "disaggregated": true,
+                  "fields": [
+                    {
+                      "expression": "`line_of_business`",
+                      "name": "line_of_business"
+                    },
+                    {
+                      "expression": "`product_name`",
+                      "name": "product_name"
+                    },
+                    {
+                      "expression": "`plan_name`",
+                      "name": "plan_name"
+                    },
+                    {
+                      "expression": "`group_name`",
+                      "name": "group_name"
+                    },
+                    {
+                      "expression": "`member_count`",
+                      "name": "member_count"
+                    },
+                    {
+                      "expression": "`subscriber_count`",
+                      "name": "subscriber_count"
+                    },
+                    {
+                      "expression": "`dependent_count`",
+                      "name": "dependent_count"
+                    },
+                    {
+                      "expression": "`medical_covered_member_count`",
+                      "name": "medical_covered_member_count"
+                    },
+                    {
+                      "expression": "`pharmacy_covered_member_count`",
+                      "name": "pharmacy_covered_member_count"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "line_of_business"
+                  },
+                  {
+                    "fieldName": "product_name"
+                  },
+                  {
+                    "fieldName": "plan_name"
+                  },
+                  {
+                    "fieldName": "group_name"
+                  },
+                  {
+                    "fieldName": "member_count"
+                  },
+                  {
+                    "fieldName": "subscriber_count"
+                  },
+                  {
+                    "fieldName": "dependent_count"
+                  },
+                  {
+                    "fieldName": "medical_covered_member_count"
+                  },
+                  {
+                    "fieldName": "pharmacy_covered_member_count"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Membership Detail"
+                }
+              },
+              "version": 2,
+              "widgetType": "table"
+            }
+          }
+        }
+      ],
+      "layoutVersion": "GRID_V1",
+      "name": "d17be8a5",
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "displayName": "Claims Analytics",
+      "layout": [
+        {
+          "position": {
+            "height": 2,
+            "width": 12,
+            "x": 0,
+            "y": 0
+          },
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Claims Analytics*</span>\n",
+                "\n",
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Claim utilization, financial performance, network and clinical mix*</span>"
+              ]
+            },
+            "name": "79c27b37"
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 0,
+            "y": 2
+          },
+          "widget": {
+            "name": "total-claims",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(claim_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Claims"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 2,
+            "y": 2
+          },
+          "widget": {
+            "name": "5c9daed7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_billed_amount`)",
+                      "name": "sum(total_billed_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_billed_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Billed"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 4,
+            "y": 2
+          },
+          "widget": {
+            "name": "9ceb9cd3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_allowed_amount`)",
+                      "name": "sum(total_allowed_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_allowed_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Allowed"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 6,
+            "y": 2
+          },
+          "widget": {
+            "name": "5eb44ed3",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_paid_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Paid"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 8,
+            "y": 2
+          },
+          "widget": {
+            "name": "f5705506",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`member_responsibility_amount`)",
+                      "name": "sum(member_responsibility_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(member_responsibility_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Member Responsibility"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 4
+          },
+          "widget": {
+            "name": "monthly-claim-volume",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "DATE_TRUNC(\"MONTH\", `service_month`)",
+                      "name": "monthly(service_month)"
+                    },
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(service_month)",
+                  "format": {
+                    "date": "locale-short-month",
+                    "type": "date"
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nMonthly Claim Volume\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "line"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 6,
+            "y": 4
+          },
+          "widget": {
+            "name": "monthly-billed-vs-allowed-vs-paid",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "DATE_TRUNC(\"MONTH\", `service_month`)",
+                      "name": "monthly(service_month)"
+                    },
+                    {
+                      "expression": "SUM(`total_billed_amount`)",
+                      "name": "sum(total_billed_amount)"
+                    },
+                    {
+                      "expression": "SUM(`total_allowed_amount`)",
+                      "name": "sum(total_allowed_amount)"
+                    },
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(service_month)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "sum(total_billed_amount)"
+                    },
+                    {
+                      "fieldName": "sum(total_allowed_amount)"
+                    },
+                    {
+                      "fieldName": "sum(total_paid_amount)"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Monthly Billed vs Allowed vs Paid"
+                }
+              },
+              "version": 3,
+              "widgetType": "line"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 10
+          },
+          "widget": {
+            "name": "claims-by-status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e371e46f",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`claim_status`",
+                      "name": "claim_status"
+                    },
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "claim_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nClaims by Status\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 6,
+            "y": 10
+          },
+          "widget": {
+            "name": "da30a043",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a415a2",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`claim_type`",
+                      "name": "claim_type"
+                    },
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "claim_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 16
+          },
+          "widget": {
+            "name": "claims-by-network-status",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a415a2",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`network_status`",
+                      "name": "network_status"
+                    },
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "network_status",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nClaims by Network Status\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 6,
+            "y": 16
+          },
+          "widget": {
+            "name": "claims-by-diagnosis-category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "c7a415a2",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`primary_diagnosis_category`",
+                      "name": "primary_diagnosis_category"
+                    },
+                    {
+                      "expression": "SUM(`claim_count`)",
+                      "name": "sum(claim_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "label": {
+                  "show": true
+                },
+                "x": {
+                  "fieldName": "primary_diagnosis_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nClaims by Diagnosis Category\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        }
+      ],
+      "layoutVersion": "GRID_V1",
+      "name": "466c7a71",
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "displayName": "Provider Utilization",
+      "layout": [
+        {
+          "position": {
+            "height": 2,
+            "width": 12,
+            "x": 0,
+            "y": 0
+          },
+          "widget": {
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Provider Utilization Analytics*</span>\n",
+                "\n",
+                "<span style=\"font-size: 24px;font-weight: 700;\">*Practitioner, specialty, supplier, location and service utilization*</span>"
+              ]
+            },
+            "name": "d6de0b30"
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 0,
+            "y": 2
+          },
+          "widget": {
+            "name": "unique-practitioners",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "COUNT(DISTINCT `practitioner_id`)",
+                      "name": "countdistinct(practitioner_id)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(practitioner_id)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Unique Practitioners"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 2,
+            "y": 2
+          },
+          "widget": {
+            "name": "ac090d36",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "COUNT(DISTINCT `supplier_id`)",
+                      "name": "countdistinct(supplier_id)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(supplier_id)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Unique Suppliers"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 4,
+            "y": 2
+          },
+          "widget": {
+            "name": "206604ca",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`claim_line_count`)",
+                      "name": "sum(claim_line_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(claim_line_count)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Claim Lines"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 6,
+            "y": 2
+          },
+          "widget": {
+            "name": "1e987a2e",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_units`)",
+                      "name": "sum(total_units)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_units)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Units"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 2,
+            "width": 2,
+            "x": 8,
+            "y": 2
+          },
+          "widget": {
+            "name": "3c295bc7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_paid_amount)",
+                  "format": {
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-plain"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "Total Paid"
+                }
+              },
+              "version": 2,
+              "widgetType": "counter"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 4
+          },
+          "widget": {
+            "name": "monthly-provider-paid-amount",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "DATE_TRUNC(\"MONTH\", `service_month`)",
+                      "name": "monthly(service_month)"
+                    },
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(service_month)",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_paid_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nMonthly Provider Paid Amount\n```"
+                }
+              },
+              "mark": {
+                "colors": [
+                  {
+                    "position": 4,
+                    "themeColorType": "visualizationColors"
+                  }
+                ]
+              },
+              "version": 3,
+              "widgetType": "line"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 6,
+            "y": 4
+          },
+          "widget": {
+            "name": "paid-amount-practitioner-specialty",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`practitioner_primary_specialty`",
+                      "name": "practitioner_primary_specialty"
+                    },
+                    {
+                      "expression": "SUM(`total_paid_amount`)",
+                      "name": "sum(total_paid_amount)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "practitioner_primary_specialty",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_paid_amount)",
+                  "format": {
+                    "abbreviation": "compact",
+                    "currencyCode": "USD",
+                    "decimalPlaces": {
+                      "places": 2,
+                      "type": "max"
+                    },
+                    "type": "number-currency"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nPaid Amount by Practitioner Specialty\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 0,
+            "y": 10
+          },
+          "widget": {
+            "name": "claim-lines-service-category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`service_category`",
+                      "name": "service_category"
+                    },
+                    {
+                      "expression": "SUM(`claim_line_count`)",
+                      "name": "sum(claim_line_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "service_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_line_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nClaim Lines by Service Category\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 6,
+            "x": 6,
+            "y": 10
+          },
+          "widget": {
+            "name": "utilization-practitioner-role",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": false,
+                  "fields": [
+                    {
+                      "expression": "`role_type`",
+                      "name": "role_type"
+                    },
+                    {
+                      "expression": "SUM(`claim_line_count`)",
+                      "name": "sum(claim_line_count)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "x": {
+                  "fieldName": "role_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(claim_line_count)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nUtilization by Practitioner Role\n```"
+                }
+              },
+              "version": 3,
+              "widgetType": "bar"
+            }
+          }
+        },
+        {
+          "position": {
+            "height": 6,
+            "width": 12,
+            "x": 0,
+            "y": 16
+          },
+          "widget": {
+            "name": "provider-utilization-detail",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "318685bd",
+                  "disaggregated": true,
+                  "fields": [
+                    {
+                      "expression": "`practitioner_first_name`",
+                      "name": "practitioner_first_name"
+                    },
+                    {
+                      "expression": "`practitioner_last_name`",
+                      "name": "practitioner_last_name"
+                    },
+                    {
+                      "expression": "`practitioner_primary_specialty`",
+                      "name": "practitioner_primary_specialty"
+                    },
+                    {
+                      "expression": "`role_type`",
+                      "name": "role_type"
+                    },
+                    {
+                      "expression": "`supplier_name`",
+                      "name": "supplier_name"
+                    },
+                    {
+                      "expression": "`supplier_location_name`",
+                      "name": "supplier_location_name"
+                    },
+                    {
+                      "expression": "`service_category`",
+                      "name": "service_category"
+                    },
+                    {
+                      "expression": "`claim_line_count`",
+                      "name": "claim_line_count"
+                    },
+                    {
+                      "expression": "`unique_member_count`",
+                      "name": "unique_member_count"
+                    },
+                    {
+                      "expression": "`total_units`",
+                      "name": "total_units"
+                    },
+                    {
+                      "expression": "`total_billed_amount`",
+                      "name": "total_billed_amount"
+                    },
+                    {
+                      "expression": "`total_allowed_amount`",
+                      "name": "total_allowed_amount"
+                    },
+                    {
+                      "expression": "`total_paid_amount`",
+                      "name": "total_paid_amount"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "data": {
+                "queryName": "main_query"
+              },
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "practitioner_first_name"
+                  },
+                  {
+                    "fieldName": "practitioner_last_name"
+                  },
+                  {
+                    "fieldName": "practitioner_primary_specialty"
+                  },
+                  {
+                    "fieldName": "role_type"
+                  },
+                  {
+                    "fieldName": "supplier_name"
+                  },
+                  {
+                    "fieldName": "supplier_location_name"
+                  },
+                  {
+                    "fieldName": "service_category"
+                  },
+                  {
+                    "fieldName": "claim_line_count"
+                  },
+                  {
+                    "fieldName": "unique_member_count"
+                  },
+                  {
+                    "fieldName": "total_units"
+                  },
+                  {
+                    "fieldName": "total_billed_amount"
+                  },
+                  {
+                    "fieldName": "total_allowed_amount"
+                  },
+                  {
+                    "fieldName": "total_paid_amount"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "fields": [],
+                  "value": "```\nProvider Utilization Detail\n```"
+                }
+              },
+              "version": 2,
+              "widgetType": "table"
+            }
+          }
+        }
+      ],
+      "layoutVersion": "GRID_V1",
+      "name": "0b01be1a",
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "applyModeEnabled": false,
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

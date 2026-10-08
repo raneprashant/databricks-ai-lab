@@ -1,0 +1,13 @@
+resources:
+  dashboards:
+    project_01_healthcare_payer_analytics:
+      display_name: "Project 01 - Healthcare Payer Analytics"
+      warehouse_id: ff718f1015c179db
+      file_path: ../projects/project_01/dashboards/project_01_healthcare_payer_analytics.lvdash.json
+
+      # Preserve the existing workspace location.
+      parent_path: /Users/ranep2006@gmail.com
+
+      # Safety protection: never delete/recreate this dashboard accidentally.
+      lifecycle:
+        prevent_destroy: true

@@ -1,0 +1,29 @@
+resources:
+
+  pipelines:
+
+    payer_01_gold:
+
+      name: payer_01_gold
+
+      catalog: ${var.catalog}
+      schema: ${var.gold_schema}
+
+      serverless: true
+
+      root_path: ../projects/project_01/src/gold
+
+      libraries:
+
+        - glob:
+            include: ../projects/project_01/src/gold/**
+
+      configuration:
+
+        payer.catalog: ${var.catalog}
+        payer.silver_schema: ${var.silver_schema}
+        payer.gold_schema: ${var.gold_schema}
+
+      development: true
+
+      channel: CURRENT
