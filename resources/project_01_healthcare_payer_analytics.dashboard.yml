@@ -2,11 +2,17 @@ resources:
   dashboards:
     project_01_healthcare_payer_analytics:
       display_name: "Project 01 - Healthcare Payer Analytics"
-      warehouse_id: ff718f1015c179db
+      #warehouse_id: ff718f1015c179db
+      warehouse_id: ${var.warehouse_id}
+      
+      dataset_catalog: ${var.catalog}
+      dataset_schema: ${var.gold_schema}
+      
       file_path: ../projects/project_01/dashboards/project_01_healthcare_payer_analytics.lvdash.json
 
       # Preserve the existing workspace location.
-      parent_path: /Users/ranep2006@gmail.com
+      #parent_path: /Users/ranep2006@gmail.com
+      parent_path: /Users/ranep2006@gmail.com/databricks-ai-lab/projects/project_01
 
       # Safety protection: never delete/recreate this dashboard accidentally.
       lifecycle:

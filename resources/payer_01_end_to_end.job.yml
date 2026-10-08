@@ -1,0 +1,163 @@
+resources:
+  jobs:
+
+    payer_01_end_to_end:
+
+      name: payer_01_end_to_end
+
+      # ======================================================
+      # Quarterly schedule
+      #
+      # Jan 1, Apr 1, Jul 1, Oct 1
+      # 6:00 AM America/New_York
+      # ======================================================
+
+      schedule:
+        quartz_cron_expression: "0 0 6 1 1,4,7,10 ?"
+        timezone_id: America/New_York
+        pause_status: UNPAUSED
+
+
+      # ======================================================
+      # TASKS
+      # ======================================================
+
+      tasks:
+
+        # ====================================================
+        # 01 - BRONZE
+        # ====================================================
+
+        - task_key: 01_bronze_ingestion
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.payer_01_bronze_ingestion.id}
+
+
+        # ====================================================
+        # 02 - SILVER MEMBER / REFERENCE
+        # ====================================================
+
+        - task_key: 02_silver_member_reference
+
+          depends_on:
+            - task_key: 01_bronze_ingestion
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.payer_01_silver_member_reference.id}
+
+
+        # ====================================================
+        # 03 - SILVER PROVIDER
+        #
+        # Runs in parallel with Member / Reference.
+        # ====================================================
+
+        - task_key: 03_silver_provider
+
+          depends_on:
+            - task_key: 01_bronze_ingestion
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.payer_01_silver_provider.id}
+
+
+        # ====================================================
+        # 04 - SILVER ELIGIBILITY
+        #
+        # Eligibility depends on Member / Reference.
+        # It does not need to wait for Provider.
+        # ====================================================
+
+        - task_key: 04_silver_eligibility
+
+          depends_on:
+            - task_key: 02_silver_member_reference
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.payer_01_silver_eligibility.id}
+
+
+        # ====================================================
+        # 05 - SILVER CLAIMS
+        #
+        # Claims require both:
+        #   - Eligibility
+        #   - Provider
+        # ====================================================
+
+        - task_key: 05_silver_claims
+
+          depends_on:
+            - task_key: 04_silver_eligibility
+            - task_key: 03_silver_provider
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.payer_01_silver_claims.id}
+
+
+        # ====================================================
+        # 06 - GOLD
+        # ====================================================
+
+        - task_key: 06_gold
+
+          depends_on:
+            - task_key: 05_silver_claims
+
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.payer_01_gold.id}
+
+
+        # ====================================================
+        # 07 - GOLD VALIDATION GATE
+        #
+        # Runs the SQL FILE stored in Git / bundle files.
+        #
+        # No saved Query ID is required.
+        # ====================================================
+
+        - task_key: 07_gold_validation
+
+          depends_on:
+            - task_key: 06_gold
+
+          sql_task:
+
+            file:
+              path: ${workspace.file_path}/projects/project_01/sql/gold_analysis/90_gold_validation_gate.sql
+              source: WORKSPACE
+
+            warehouse_id: ${var.warehouse_id}
+
+            parameters:
+              catalog: ${var.catalog}
+              silver_schema: ${var.silver_schema}
+              gold_schema: ${var.gold_schema}
+
+
+        # ====================================================
+        # 08 - DASHBOARD REFRESH
+        #
+        # The dashboard ID is resolved independently for each
+        # bundle target.
+        # ====================================================
+
+        - task_key: 08_dashboard_refresh
+
+          depends_on:
+            - task_key: 07_gold_validation
+
+          dashboard_task:
+            dashboard_id: ${resources.dashboards.project_01_healthcare_payer_analytics.id}
+            warehouse_id: ${var.warehouse_id}
+
+
+      # ======================================================
+      # JOB SETTINGS
+      # ======================================================
+
+      queue:
+        enabled: true
+
+      performance_target: PERFORMANCE_OPTIMIZED

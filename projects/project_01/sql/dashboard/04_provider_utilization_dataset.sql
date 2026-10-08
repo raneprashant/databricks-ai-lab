@@ -90,5 +90,5 @@ SELECT
 
 FROM
 
-    payer_01_dev.gold.provider_utilization_summary
+    provider_utilization_summary
 ;

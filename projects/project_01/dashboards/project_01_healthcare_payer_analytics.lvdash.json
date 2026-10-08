@@ -1,6 +1,7 @@
 {
   "datasets": [
     {
+      "catalog": "payer_01_dev",
       "displayName": "membership",
       "name": "88240498",
       "queryLines": [
@@ -56,11 +57,13 @@
         "\r\n",
         "FROM\r\n",
         "\r\n",
-        "    payer_01_dev.gold.membership_summary\r\n",
+        "    membership_summary\r\n",
         ";"
-      ]
+      ],
+      "schema": "gold"
     },
     {
+      "catalog": "payer_01_dev",
       "displayName": "claim_spend",
       "name": "e371e46f",
       "queryLines": [
@@ -124,11 +127,13 @@
         "\r\n",
         "FROM\r\n",
         "\r\n",
-        "    payer_01_dev.gold.claim_spend_summary\r\n",
+        "    claim_spend_summary\r\n",
         ";"
-      ]
+      ],
+      "schema": "gold"
     },
     {
+      "catalog": "payer_01_dev",
       "displayName": "claim_mix",
       "name": "c7a415a2",
       "queryLines": [
@@ -196,7 +201,7 @@
         "\r\n",
         "FROM\r\n",
         "\r\n",
-        "    payer_01_dev.gold.claims_enriched\r\n",
+        "    claims_enriched\r\n",
         "\r\n",
         "GROUP BY\r\n",
         "\r\n",
@@ -222,9 +227,11 @@
         "\r\n",
         "    primary_diagnosis_category\r\n",
         ";"
-      ]
+      ],
+      "schema": "gold"
     },
     {
+      "catalog": "payer_01_dev",
       "displayName": "provider_utilization",
       "name": "318685bd",
       "queryLines": [
@@ -320,9 +327,10 @@
         "\r\n",
         "FROM\r\n",
         "\r\n",
-        "    payer_01_dev.gold.provider_utilization_summary\r\n",
+        "    provider_utilization_summary\r\n",
         ";"
-      ]
+      ],
+      "schema": "gold"
     }
   ],
   "pages": [

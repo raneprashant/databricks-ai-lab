@@ -62,7 +62,7 @@ SELECT
 
 FROM
 
-    payer_01_dev.gold.claims_enriched
+    claims_enriched
 
 GROUP BY
 

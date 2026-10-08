@@ -1,26 +1,9 @@
-# This is a Declarative Automation Bundle definition for databricks-ai-lab.
-# Databricks resources such as pipelines and jobs are defined
-# under the resources folder and included here.
-
 bundle:
   name: databricks-ai-lab
-
-
-# ---------------------------------------------------------
-# Resource definitions
-# ---------------------------------------------------------
 
 include:
   - resources/*.yml
 
-
-# ---------------------------------------------------------
-# Environment variables
-#
-# These allow the same code to be deployed later to
-# DEV / TEST / PROD without hardcoding environment names
-# inside Python source files.
-# ---------------------------------------------------------
 
 variables:
 
@@ -41,36 +24,95 @@ variables:
     default: gold
 
   landing_root:
-    description: Landing volume path for inbound payer files
+    description: Bronze landing Volume root
     default: /Volumes/payer_01_dev/bronze/landing
 
-
-# ---------------------------------------------------------
-# Deployment targets
-# ---------------------------------------------------------
+  warehouse_id:
+    description: SQL Warehouse used by Project 01 SQL and dashboard tasks
+    default: ff718f1015c179db
 
 targets:
 
+  # ==========================================================
+  # DEV
+  # ==========================================================
+
   dev:
+
     mode: development
+
     default: true
 
     workspace:
       host: https://dbc-536d8077-bb93.cloud.databricks.com
 
+    variables:
 
-  # We will add these later.
+      catalog: payer_01_dev
+
+      bronze_schema: bronze
+
+      silver_schema: silver
+
+      gold_schema: gold
+
+      landing_root: /Volumes/payer_01_dev/bronze/landing
+
+
+  # ==========================================================
+  # TEST
   #
-  # test:
-  #   mode: development
-  #   variables:
-  #     catalog: payer_01_test
-  #     bronze_schema: bronze
-  #     landing_root: /Volumes/payer_01_test/bronze/landing
+  # Same physical workspace for our learning environment,
+  # but separate bundle deployment state and TEST catalog.
+  # ==========================================================
+
+  test:
+
+    workspace:
+      host: https://dbc-536d8077-bb93.cloud.databricks.com
+
+    presets:
+      name_prefix: "[TEST] "
+
+    variables:
+
+      catalog: payer_01_test
+
+      bronze_schema: bronze
+
+      silver_schema: silver
+
+      gold_schema: gold
+
+      landing_root: /Volumes/payer_01_test/bronze/landing
+
+
+  # ==========================================================
+  # PROD
   #
-  # prod:
-  #   mode: production
-  #   variables:
-  #     catalog: payer_01_prod
-  #     bronze_schema: bronze
-  #     landing_root: /Volumes/payer_01_prod/bronze/landing
+  # Still the same physical workspace in this lab.
+  #
+  # In a real enterprise implementation this target would
+  # normally point to a separate PROD workspace and would use
+  # production mode + service principal / controlled root path.
+  # ==========================================================
+
+  prod:
+
+    workspace:
+      host: https://dbc-536d8077-bb93.cloud.databricks.com
+
+    presets:
+      name_prefix: "[PROD] "
+
+    variables:
+
+      catalog: payer_01_prod
+
+      bronze_schema: bronze
+
+      silver_schema: silver
+
+      gold_schema: gold
+
+      landing_root: /Volumes/payer_01_prod/bronze/landing

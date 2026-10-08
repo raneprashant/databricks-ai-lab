@@ -50,5 +50,5 @@ SELECT
 
 FROM
 
-    payer_01_dev.gold.membership_summary
+    membership_summary
 ;

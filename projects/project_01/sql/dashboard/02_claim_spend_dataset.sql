@@ -58,5 +58,5 @@ SELECT
 
 FROM
 
-    payer_01_dev.gold.claim_spend_summary
+    claim_spend_summary
 ;
