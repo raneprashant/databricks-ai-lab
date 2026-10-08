@@ -1,3 +1,81 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: validate_claims.py
+
+Purpose
+-------
+Performs comprehensive business, referential, temporal, clinical, and
+financial validation of generated Claim Header and Claim Line data.
+
+What This Module Validates
+--------------------------
+Claim Line validation includes:
+
+- Unique Claim Line identifiers.
+- Parent Claim Header existence.
+- Line numbering.
+- Service-date validity.
+- Service Category / Procedure relationships.
+- Revenue-code behavior.
+- Diagnosis code/category relationships.
+- Units and Claim Line status.
+- Billed, allowed, paid, and member-responsibility amounts.
+
+Claim Header validation includes:
+
+- Unique Claim identifiers.
+- Member relationship.
+- Exact Eligibility relationship.
+- Claim service dates.
+- Member birth/death constraints.
+- Eligibility coverage on the service date.
+- Practitioner Role relationship and effective period.
+- Practitioner, Supplier, and Supplier Location relationships.
+- Benefit Plan relationship.
+- Claim Type / Place-of-Service behavior.
+- Admission/discharge rules for institutional claims.
+- Primary diagnosis.
+- Claim status.
+- Financial ordering and consistency.
+- Claim Header totals versus aggregated Claim Lines.
+
+The validator also checks configured global row counts and produces
+distribution/error summaries.
+
+Inputs
+------
+- member/*.csv
+- eligibility/*.csv
+- practitioner/*.csv
+- practitioner_role/*.csv
+- supplier/*.csv
+- supplier_location/*.csv
+- benefit_plan/*.csv
+- claim_header/*.csv
+- claim_line/*.csv
+- config.py
+- reference_data.py
+
+Output
+------
+Prints distributions, categorized error counts, sample errors, and a
+final PASS or FAIL result.
+
+Execution
+---------
+Example:
+
+    python validate_claims.py --scale medium
+
+Important Notes
+---------------
+This validator is read-only and is intended to identify source-data
+problems before downstream Bronze/Silver processing.
+"""
+
+
+
+
 import argparse
 import csv
 from collections import Counter, defaultdict

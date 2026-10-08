@@ -1,3 +1,49 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: practitioner_generator.py
+
+Purpose
+-------
+Generates synthetic individual healthcare Practitioners for the
+Project 01 provider-network model.
+
+What This Module Does
+---------------------
+- Creates unique Practitioner business IDs.
+- Generates synthetic individual NPI values.
+- Generates names, credentials, suffixes, and primary specialties.
+- Generates professional license number and license state.
+- Generates board-certification indicators.
+- Generates Practitioner status and effective/termination dates.
+- Keeps historical Practitioners relevant to at least part of the
+  Project 01 observation period.
+- Generates source-system keys and technical timestamps.
+- Writes Practitioner records into multiple CSV files.
+
+Inputs / Dependencies
+---------------------
+- config.py
+- reference_data.py
+- Requested Practitioner count
+
+Outputs
+-------
+generated_data/<scale>/practitioner/practitioner_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain practitioner
+
+Business Role
+-------------
+Practitioner represents the individual clinician. Organizational and
+location affiliations are created separately by
+practitioner_role_generator.py.
+"""
+
+
 import csv
 import random
 from datetime import date, datetime, timedelta

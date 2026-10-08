@@ -1,3 +1,52 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: supplier_location_generator.py
+
+Purpose
+-------
+Generates physical Supplier Locations belonging to healthcare Supplier
+organizations.
+
+What This Module Does
+---------------------
+- Loads previously generated Supplier records.
+- Guarantees at least one physical location for every Supplier.
+- Uses weighted Supplier characteristics so larger organization types
+  can naturally receive more locations.
+- Generates location names and location types.
+- Generates synthetic facility NPI values.
+- Generates place-of-service codes.
+- Generates network status and network tier.
+- Generally inherits parent Supplier network characteristics while
+  allowing limited location-level variation.
+- Generates active status, effective/termination dates, source keys,
+  and technical timestamps.
+
+Inputs / Dependencies
+---------------------
+- supplier/*.csv
+- config.py
+- reference_data.py
+
+Outputs
+-------
+generated_data/<scale>/supplier_location/supplier_location_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain supplier_location
+
+Business Role
+-------------
+Supplier Location represents the physical site where healthcare
+services are delivered.
+"""
+
+
+
+
 import csv
 import random
 from datetime import date, datetime, timedelta

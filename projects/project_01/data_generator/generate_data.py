@@ -1,3 +1,60 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: generate_data.py
+
+Purpose
+-------
+Provides the primary command-line entry point and domain router for
+Project 01 base synthetic-data generation.
+
+What This Module Does
+---------------------
+- Reads the requested dataset scale.
+- Reads the requested source domain.
+- Retrieves the appropriate row counts from config.py.
+- Calls the correct domain-specific generator.
+- Provides a summary mode that displays the planned row counts without
+  generating data.
+
+Supported Domains
+-----------------
+- summary
+- member
+- supplier
+- supplier_location
+- practitioner
+- practitioner_role
+- address
+- entity_address
+- payer_reference
+- eligibility
+- claims
+
+Outputs
+-------
+Domain-specific CSV files are written below:
+
+    generated_data/<scale>/
+
+Execution
+---------
+Display the generation plan:
+
+    python generate_data.py --scale medium --domain summary
+
+Generate one domain:
+
+    python generate_data.py --scale medium --domain member
+
+Notes
+-----
+This module primarily coordinates other generator modules. Most
+domain-specific business logic lives in the corresponding generator
+module rather than in this script.
+"""
+
+
+
 import argparse
 
 from config import GENERATED_DATA_ROOT, get_scale

@@ -1,3 +1,68 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: eligibility_generator.py
+
+Purpose
+-------
+Generates realistic longitudinal Member Eligibility history for the
+healthcare payer source model.
+
+What This Module Does
+---------------------
+- Loads Member and payer-reference source datasets.
+- Creates exactly three Eligibility versions per Member for the
+  configured base dataset.
+- Links coverage to valid Product, Benefit Plan, Group, and Subgroup
+  combinations.
+- Enforces effective-date compatibility across the payer hierarchy.
+- Models subscriber/dependent and family coverage behavior.
+- Generates realistic Eligibility lifecycle events such as:
+    - NEW_ENROLLMENT
+    - PLAN_CHANGE
+    - GROUP_CHANGE
+    - DEMOGRAPHIC_CHANGE
+    - ADDRESS_CHANGE
+    - RETROACTIVE_TERMINATION
+    - REINSTATEMENT
+    - FUTURE_ENROLLMENT
+    - COVERAGE_CORRECTION
+    - NEWBORN_ADDITION
+    - DEPENDENT_AGE_OUT
+    - DEPENDENT_REMOVED
+    - DEATH
+- Handles member birth, death, age, and relationship constraints.
+- Generates coverage dates, transaction dates, event-effective dates,
+  source-current indicators, and coverage flags.
+
+Inputs / Dependencies
+---------------------
+- member/*.csv
+- product/*.csv
+- benefit_plan/*.csv
+- group/*.csv
+- subgroup/*.csv
+- config.py
+
+Outputs
+-------
+generated_data/<scale>/eligibility/eligibility_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain eligibility
+
+Important Notes
+---------------
+For the base dataset, the configured Eligibility row count must equal
+three records per Member.
+
+Eligibility is intentionally modeled as event/history data rather than
+as a simple one-row-per-member current-state table.
+"""
+
+
 import csv
 import random
 from collections import defaultdict

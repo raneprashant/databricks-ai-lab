@@ -1,3 +1,53 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: validate_payer_reference.py
+
+Purpose
+-------
+Validates the core Product, Benefit Plan, Group, and Subgroup payer
+reference hierarchy generated for Project 01.
+
+What This Module Validates
+--------------------------
+- Every Benefit Plan references an existing Product.
+- Every Subgroup references an existing Group.
+- Every Subgroup references an existing Benefit Plan.
+- The Line of Business of the Group agrees with the Line of Business
+  of the Product associated with the Subgroup's Benefit Plan.
+
+Inputs
+------
+- product/*.csv
+- benefit_plan/*.csv
+- group/*.csv
+- subgroup/*.csv
+
+Output
+------
+Prints source row counts, total errors, sample validation errors, and
+a final:
+
+    PAYER REFERENCE VALIDATION PASSED
+
+or:
+
+    PAYER REFERENCE VALIDATION FAILED
+
+Execution
+---------
+Example:
+
+    python validate_payer_reference.py --scale medium
+
+Important Notes
+---------------
+This is a focused reference-data integrity validator. More extensive
+Eligibility and downstream relationship validation is handled by the
+other validation modules.
+"""
+
+
+
 import csv
 import argparse
 from pathlib import Path

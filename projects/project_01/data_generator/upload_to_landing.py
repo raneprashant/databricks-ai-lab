@@ -1,3 +1,66 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: upload_to_landing.py
+
+Purpose
+-------
+Uploads generated Project 01 base or incremental CSV source files from
+the local machine to the Databricks Bronze landing Volume.
+
+What This Module Does
+---------------------
+- Verifies that the Databricks CLI is available in PATH.
+- Supports smoke, medium, and full generated-data scales.
+- Uploads either:
+    - the base generated dataset, or
+    - one specified incremental batch.
+- Processes all 14 Project 01 source domains.
+- Creates the remote domain directory when required.
+- Copies each local CSV into the corresponding Databricks landing
+  directory.
+- Uses the configured Databricks CLI profile.
+- Uses --overwrite when copying a file with the same remote filename.
+
+Local Sources
+-------------
+Base load:
+
+    generated_data/<scale>/<domain>/*.csv
+
+Incremental load:
+
+    generated_data/<scale>/incremental/<batch_id>/<domain>/*.csv
+
+Default Databricks Target
+-------------------------
+    /Volumes/payer_01_dev/bronze/landing/<domain>/
+
+The catalog, schema, Volume, and CLI profile can be overridden through
+command-line arguments.
+
+Execution
+---------
+Base upload example:
+
+    python upload_to_landing.py --scale medium
+
+Incremental upload example:
+
+    python upload_to_landing.py \
+        --scale medium \
+        --batch-id 20261008_153701
+
+Default CLI profile:
+
+    DATABRICKS_FREE
+
+Important Notes
+---------------
+This script uploads source files only. It does not execute Bronze,
+Silver, Gold, validation, or dashboard pipelines/jobs.
+"""
+
+
 import argparse
 import shutil
 import subprocess

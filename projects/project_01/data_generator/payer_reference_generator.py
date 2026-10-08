@@ -1,3 +1,63 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: payer_reference_generator.py
+
+Purpose
+-------
+Generates the core healthcare payer Product, Benefit Plan, Group, and
+Subgroup reference hierarchy.
+
+What This Module Generates
+--------------------------
+1. Product
+2. Benefit Plan
+3. Group
+4. Subgroup
+
+Business Relationships
+----------------------
+Product
+    -> Benefit Plan
+
+Group
+    -> Subgroup
+    -> Benefit Plan
+    -> Product
+
+What This Module Does
+---------------------
+- Generates multiple healthcare Lines of Business and product types.
+- Generates plan design attributes such as deductibles, out-of-pocket
+  limits, copays, coinsurance, networks, and benefit coverage flags.
+- Generates employer/group attributes and funding arrangements.
+- Connects Subgroups to compatible Benefit Plans.
+- Enforces Line-of-Business consistency across Group, Subgroup,
+  Benefit Plan, and Product.
+- Ensures Group and Benefit Plan effective periods overlap before a
+  Subgroup relationship is created.
+- Prevents Subgroup termination dates from preceding effective dates.
+- Generates active, terminated, and future-effective reference data.
+
+Inputs / Dependencies
+---------------------
+- config.py
+- Requested Product, Plan, Group, and Subgroup counts
+
+Outputs
+-------
+generated_data/<scale>/product/product_###.csv
+generated_data/<scale>/benefit_plan/benefit_plan_###.csv
+generated_data/<scale>/group/group_###.csv
+generated_data/<scale>/subgroup/subgroup_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain payer_reference
+"""
+
+
 import csv
 import random
 from datetime import date, datetime, timedelta

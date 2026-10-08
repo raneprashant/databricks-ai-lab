@@ -1,3 +1,57 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: practitioner_role_generator.py
+
+Purpose
+-------
+Generates Practitioner Role / Affiliation records connecting individual
+Practitioners to Supplier organizations and Supplier Locations.
+
+What This Module Does
+---------------------
+- Loads Practitioner and Supplier Location source records.
+- Creates at least one affiliation for each Practitioner.
+- Allows additional affiliations while limiting excessive assignments.
+- Connects:
+      Practitioner
+          -> Supplier
+          -> Supplier Location
+- Generates role types such as PCP, SPECIALIST,
+  ATTENDING_PHYSICIAN, SURGEON, and EMERGENCY_PHYSICIAN where
+  appropriate.
+- Generates role specialty and PCP indicators.
+- Identifies a primary affiliation for a Practitioner.
+- Generates panel status and accepting-new-patients indicators.
+- Generates network status and network tier.
+- Enforces temporal compatibility between Practitioner and location
+  relationships.
+- Generates role status, effective/termination dates, source keys,
+  and technical timestamps.
+
+Inputs / Dependencies
+---------------------
+- practitioner/*.csv
+- supplier_location/*.csv
+- config.py
+- reference_data.py
+
+Outputs
+-------
+generated_data/<scale>/practitioner_role/practitioner_role_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain practitioner_role
+
+Business Role
+-------------
+This bridge represents where and in what capacity a Practitioner
+participates in the payer/provider network.
+"""
+
+
 import csv
 import random
 from datetime import date, datetime, timedelta

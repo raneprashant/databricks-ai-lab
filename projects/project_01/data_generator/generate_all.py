@@ -1,3 +1,61 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: generate_all.py
+
+Purpose
+-------
+Runs the complete base synthetic-data generation process in the
+required dependency order.
+
+What This Module Does
+---------------------
+Executes generate_data.py as a separate subprocess for each domain
+group in this sequence:
+
+    1. member
+    2. supplier
+    3. supplier_location
+    4. practitioner
+    5. practitioner_role
+    6. address
+    7. entity_address
+    8. payer_reference
+    9. eligibility
+   10. claims
+
+Why The Order Matters
+---------------------
+Several generators depend on data produced by earlier generators.
+For example:
+
+- Supplier Location requires Supplier.
+- Practitioner Role requires Practitioner and Supplier Location.
+- Entity Address requires the Address and provider/member domains.
+- Eligibility requires Member and payer-reference data.
+- Claims require Eligibility and provider/reference data.
+
+Behavior
+--------
+- Executes each domain through generate_data.py.
+- Reports execution time for each domain.
+- Stops immediately if any domain-generation subprocess fails.
+- Reports total generation runtime after successful completion.
+
+Execution
+---------
+Example:
+
+    python generate_all.py --scale medium
+
+Supported scales:
+
+    smoke
+    medium
+    full
+"""
+
+
+
 import argparse
 import subprocess
 import sys

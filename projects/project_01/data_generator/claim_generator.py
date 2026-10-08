@@ -1,3 +1,58 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: claim_generator.py
+
+Purpose
+-------
+Generates synthetic healthcare Claim Header and Claim Line source data
+with realistic payer, member, eligibility, provider, clinical, network,
+and financial relationships.
+
+What This Module Does
+---------------------
+- Loads Eligibility, Practitioner Role, Supplier Location, and
+  Benefit Plan source data.
+- Determines which Eligibility records are valid for claim generation.
+- Avoids using future-only coverage for historical claims.
+- Selects Practitioner Roles that are valid on the service date.
+- Generates PROFESSIONAL, INSTITUTIONAL_OUTPATIENT, and
+  INSTITUTIONAL_INPATIENT claims.
+- Generates diagnosis, procedure, revenue-code, service-category,
+  network, and place-of-service information.
+- Generates PAID, ADJUSTED, and DENIED claim-line behavior.
+- Calculates billed, allowed, paid, and member-responsibility amounts.
+- Reconciles Claim Header financial totals to their Claim Lines.
+- Uses rolling CSV writers so large Claim datasets do not need to be
+  held entirely in memory.
+
+Inputs / Dependencies
+---------------------
+- eligibility/*.csv
+- practitioner_role/*.csv
+- supplier_location/*.csv
+- benefit_plan/*.csv
+- config.py
+- reference_data.py
+
+Outputs
+-------
+generated_data/<scale>/claim_header/claim_header_###.csv
+generated_data/<scale>/claim_line/claim_line_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain claims
+
+Notes
+-----
+Claim Headers and Claim Lines are generated together so their counts,
+financial values, service dates, provider context, and eligibility
+relationships remain internally consistent.
+"""
+
+
 import csv
 import random
 from collections import defaultdict

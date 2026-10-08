@@ -1,3 +1,72 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: entity_address_generator.py
+
+Purpose
+-------
+Generates the Entity Address Bridge that connects Project 01 business
+entities to records in the Address Master.
+
+What This Module Does
+---------------------
+Creates address relationships for:
+
+- MEMBER
+- PRACTITIONER
+- SUPPLIER
+- SUPPLIER_LOCATION
+- PRACTITIONER_ROLE
+
+Supported address concepts include:
+
+- RESIDENTIAL
+- MAILING
+- CORRESPONDENCE
+- PRIMARY_BUSINESS
+- BILLING
+- SERVICE_LOCATION
+- PRIMARY_PRACTICE
+- PRACTICE
+
+Important Business Rules
+------------------------
+- Members in the same household share the household residential address.
+- Supplier Locations receive physical SERVICE_LOCATION addresses.
+- A Practitioner Role PRACTICE address matches the associated
+  Supplier Location SERVICE_LOCATION address.
+- A Practitioner's PRIMARY_PRACTICE follows the location of the
+  practitioner's primary affiliation.
+- Optional mailing, billing, and correspondence relationships provide
+  realistic multiple-address behavior.
+- Relationships are not created when entity and address-effective
+  periods cannot form a valid temporal relationship.
+- The generator does not manufacture dates to force an impossible
+  relationship to become valid.
+
+Inputs / Dependencies
+---------------------
+- address/*.csv
+- member/*.csv
+- practitioner/*.csv
+- supplier/*.csv
+- supplier_location/*.csv
+- practitioner_role/*.csv
+- config.py
+
+Outputs
+-------
+generated_data/<scale>/entity_address/entity_address_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain entity_address
+"""
+
+
+
+
 import csv
 import random
 from datetime import date, datetime

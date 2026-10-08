@@ -1,3 +1,73 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: validate_eligibility.py
+
+Purpose
+-------
+Performs comprehensive validation of generated Member Eligibility
+history and payer-reference relationships.
+
+What This Module Validates
+--------------------------
+- Member Master relationships.
+- Unique Eligibility identifiers.
+- Member-to-Eligibility referential integrity.
+- Product, Benefit Plan, Group, and Subgroup hierarchy.
+- Benefit coverage flags against the referenced Benefit Plan.
+- Coverage, event-effective, and transaction dates.
+- Product/Plan/Group/Subgroup temporal compatibility.
+- Eligibility termination/effective-date integrity.
+- Member Eligibility version sequencing.
+- Transaction dates that must not move backward through history.
+- Current-record behavior.
+- Event-specific business rules for scenarios such as:
+    - RETRO TERM
+    - COVERAGE CORRECTION
+    - FUTURE ENROLLMENT
+    - REINSTATEMENT
+    - DEATH
+    - NEWBORN
+    - DEPENDENT AGE OUT
+    - REMOVE DEPENDENT
+- Medicare individual-coverage behavior.
+- Expected global Eligibility row count.
+
+Inputs
+------
+- member/*.csv
+- product/*.csv
+- benefit_plan/*.csv
+- group/*.csv
+- subgroup/*.csv
+- eligibility/*.csv
+- config.py
+
+Output
+------
+Prints event distributions, categorized errors, sample errors, and a
+final:
+
+    ENHANCED ELIGIBILITY VALIDATION PASSED
+
+or:
+
+    ENHANCED ELIGIBILITY VALIDATION FAILED
+
+Execution
+---------
+Example:
+
+    python validate_eligibility.py --scale medium
+
+Important Notes
+---------------
+This validator is read-only. It validates the generated event/history
+model rather than converting Eligibility into a current-state table.
+"""
+
+
+
+
 import csv
 import argparse
 from collections import Counter, defaultdict

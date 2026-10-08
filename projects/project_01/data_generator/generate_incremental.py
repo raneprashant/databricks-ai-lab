@@ -1,3 +1,73 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: generate_incremental.py
+
+Purpose
+-------
+Generates synthetic incremental source batches used to test end-to-end
+incremental ingestion, CDC, SCD Type 2 history, Gold refresh, validation,
+and dashboard processing.
+
+What This Module Does
+---------------------
+- Reads the original base dataset.
+- Reads all prior incremental batches that precede the new batch.
+- Determines the latest known version of dimension-like business keys.
+- Generates updates to existing dimension/reference entities.
+- Generates new Eligibility events.
+- Generates a mixture of new Claims and updates to existing Claims.
+- Preserves Claim and Claim Line business IDs for updates so downstream
+  SCD Type 2 processing can detect and retain meaningful history.
+- Generates new business IDs where the event represents a true insert.
+- Writes one incremental CSV for each of the 14 Project 01 domains.
+- Creates batch_manifest.csv describing row counts, change types,
+  and generated filenames.
+
+Incremental Behavior
+--------------------
+Dimension-like domains update existing business keys.
+
+Eligibility is generated as new event/history records.
+
+Claims contain mixed insert/update behavior. Incoming updates that
+change only excluded technical metadata may intentionally produce no
+new downstream SCD Type 2 business-history version.
+
+Inputs
+------
+Base data:
+
+    generated_data/<scale>/<domain>/*.csv
+
+Prior incremental data:
+
+    generated_data/<scale>/incremental/<prior_batch_id>/<domain>/*.csv
+
+Outputs
+-------
+    generated_data/<scale>/incremental/<batch_id>/
+
+The batch folder contains all domain CSV files plus:
+
+    batch_manifest.csv
+
+Execution
+---------
+Example:
+
+    python generate_incremental.py \
+        --scale medium \
+        --batch-id 20261008_153701
+
+If --batch-id is omitted, a timestamp-based batch ID is generated.
+
+Important Notes
+---------------
+This script generates files locally only. It does not upload files to
+Databricks and does not execute the Bronze/Silver/Gold pipelines.
+"""
+
+
 import argparse
 import csv
 import random

@@ -1,3 +1,45 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: config.py
+
+Purpose
+-------
+Provides the central configuration used by the synthetic healthcare
+payer data generators.
+
+What This Module Defines
+------------------------
+- Project and generated-data directory locations.
+- Global deterministic random seed.
+- Synthetic business observation period.
+- Future coverage horizon used by Eligibility generation.
+- Dataset scales: smoke, medium, and full.
+- Target row counts for every Project 01 source domain.
+- Maximum rows written to each generated CSV file.
+- ScaleConfig dataclass and get_scale() helper.
+
+Business Timeline
+-----------------
+The synthetic data currently uses:
+
+    DATA_START_DATE           = 2024-01-01
+    DATA_END_DATE             = 2026-09-30
+    FUTURE_COVERAGE_END_DATE  = 2027-03-31
+
+Usage
+-----
+This module is imported by the generator and validation modules.
+It is not normally executed directly.
+
+Important Notes
+---------------
+Changes to row counts, business dates, RANDOM_SEED, or ROWS_PER_FILE
+can affect many downstream generators and validation expectations.
+
+The fixed RANDOM_SEED makes base-data generation reproducible.
+"""
+
+
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path

@@ -1,3 +1,43 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: reference_data.py
+
+Purpose
+-------
+Provides reusable static synthetic reference values used by the
+Project 01 data generators.
+
+Reference Content Includes
+--------------------------
+- Male and female first names
+- Last names
+- Languages and marital statuses
+- Supplier naming components and organization types
+- Supplier ownership types
+- Supplier Location types and naming values
+- Place-of-service codes
+- Practitioner credentials, suffixes, specialties, and license states
+- Practitioner Role and PCP-related reference values
+- Address street names, suffixes, and geographic regions
+- Claim diagnosis categories and diagnosis codes
+- Claim procedure/service-category profiles
+- Specialty-to-diagnosis relationships
+
+Usage
+-----
+This module is imported by other generators and is not normally
+executed directly.
+
+Important Notes
+---------------
+Reference values are synthetic and are intended for learning,
+development, and testing only. They are not intended to represent
+production healthcare code sets or real individuals/organizations.
+"""
+
+
+
+
 FIRST_NAMES_MALE = [
     "James", "John", "Robert", "Michael", "David",
     "William", "Richard", "Joseph", "Thomas", "Charles",

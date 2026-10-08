@@ -1,3 +1,53 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: supplier_generator.py
+
+Purpose
+-------
+Generates synthetic healthcare Supplier organizations used by the
+Project 01 provider-network model.
+
+What This Module Does
+---------------------
+- Generates unique healthcare organization names.
+- Generates Supplier types such as hospital organizations,
+  physician groups, behavioral-health organizations, urgent-care
+  organizations, imaging organizations, laboratories, and specialty
+  care organizations.
+- Generates ownership type.
+- Generates synthetic Tax IDs and organization NPI values.
+- Generates network participation attributes.
+- Generates contract status and effective/termination dates.
+- Includes current, terminated, and future-effective contract behavior.
+- Generates source-system keys and technical timestamps.
+
+Inputs / Dependencies
+---------------------
+- config.py
+- reference_data.py
+- Requested Supplier count
+
+Outputs
+-------
+generated_data/<scale>/supplier/supplier_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain supplier
+
+Business Role
+-------------
+Supplier represents the healthcare organization. Physical service
+locations are generated separately by supplier_location_generator.py.
+"""
+
+
+
+
+
+
 import csv
 import random
 from datetime import date, datetime, timedelta

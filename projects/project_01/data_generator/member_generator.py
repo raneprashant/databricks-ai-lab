@@ -1,3 +1,49 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: member_generator.py
+
+Purpose
+-------
+Generates synthetic healthcare payer Member and family/household
+source data.
+
+What This Module Does
+---------------------
+- Creates Members grouped into synthetic families.
+- Creates one subscriber (SELF) per family.
+- Generates SPOUSE and CHILD dependents according to household size.
+- Maintains subscriber_id and family_id relationships.
+- Generates realistic age relationships between subscriber, spouse,
+  and children.
+- Generates names, gender, marital status, language, phone, and email.
+- Generates Member status, deceased indicator, and death date where
+  applicable.
+- Generates source-system keys and technical timestamps.
+- Writes Member data into multiple CSV files according to
+  ROWS_PER_FILE configuration.
+
+Inputs / Dependencies
+---------------------
+- config.py
+- reference_data.py
+- Requested Member count supplied by generate_data.py
+
+Outputs
+-------
+generated_data/<scale>/member/member_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain member
+
+Business Role
+-------------
+Member data provides the demographic and family foundation used later
+by Eligibility, Entity Address, and Claims generation.
+"""
+
 import csv
 import random
 from datetime import date, datetime, timedelta

@@ -1,3 +1,64 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: validate_addresses.py
+
+Purpose
+-------
+Validates the generated Entity Address model and its important
+cross-entity business relationships before the data is ingested into
+Databricks.
+
+What This Module Validates
+--------------------------
+- Distribution of Entity Type / Address Type relationships.
+- Required address types:
+    MEMBER             -> RESIDENTIAL
+    PRACTITIONER       -> PRIMARY_PRACTICE
+    SUPPLIER           -> PRIMARY_BUSINESS
+    SUPPLIER_LOCATION  -> SERVICE_LOCATION
+    PRACTITIONER_ROLE  -> PRACTICE
+- Practitioner Role PRACTICE address matches the associated
+  Supplier Location SERVICE_LOCATION address.
+- Practitioner PRIMARY_PRACTICE matches the location of the
+  practitioner's primary affiliation.
+- Members in multi-member families share the expected household
+  residential address.
+- Presence of multiple address types for supported entities.
+
+Inputs
+------
+- entity_address/*.csv
+- member/*.csv
+- practitioner/*.csv
+- supplier/*.csv
+- supplier_location/*.csv
+- practitioner_role/*.csv
+
+Output
+------
+Prints validation counts, distributions, mismatches, and a final:
+
+    ADDRESS VALIDATION PASSED
+
+or:
+
+    ADDRESS VALIDATION FAILED
+
+Execution
+---------
+Example:
+
+    python validate_addresses.py --scale medium
+
+Important Notes
+---------------
+The validator is read-only. It reports problems but does not modify
+or repair generated source data.
+"""
+
+
+
+
 import csv
 import argparse
 from collections import Counter, defaultdict

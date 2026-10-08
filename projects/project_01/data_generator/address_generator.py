@@ -1,3 +1,52 @@
+"""
+Project 01 - Healthcare Payer Data Platform
+Module: address_generator.py
+
+Purpose
+-------
+Generates the synthetic Address Master source data used by Project 01.
+
+What This Module Does
+---------------------
+- Creates deterministic Address IDs and reusable physical addresses.
+- Generates street, city, state, ZIP code, county, and country information.
+- Optionally generates secondary address information such as apartment,
+  suite, unit, or floor.
+- Generates address status and geocode-quality attributes.
+- Generates source-system keys and technical create/update timestamps.
+- Writes the Address Master across one or more CSV files according to
+  the ROWS_PER_FILE configuration.
+
+Business Role
+-------------
+The Address Master stores physical addresses independently from the
+business entities that use them. Members, Practitioners, Suppliers,
+Supplier Locations, and Practitioner Roles are associated to addresses
+later through the Entity Address Bridge.
+
+Inputs / Dependencies
+---------------------
+- config.py
+- reference_data.py
+- Requested address row count supplied by generate_data.py
+
+Outputs
+-------
+generated_data/<scale>/address/address_###.csv
+
+Execution
+---------
+Normally invoked through:
+
+    python generate_data.py --scale medium --domain address
+
+Notes
+-----
+This module creates the reusable Address Master only. Entity-to-address
+relationships are created separately by entity_address_generator.py.
+"""
+
+
 import csv
 import random
 from datetime import date, datetime, timedelta
